@@ -47,8 +47,10 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           repository: Jin-Aladdin/aladdin-spec
-          # Pin to an immutable ref before relying on this in production.
-          ref: v0.1.0
+          # Pinned to a commit rather than a tag: a commit cannot be moved,
+          # and the inventory schema this workflow needs was added after
+          # v0.1.0 was tagged. Move to a tag once one contains it.
+          ref: fcc465b90ab1e32d6bca576db9ac24000b911ffb
           path: .aladdin-spec
 
       - name: Set up Python
