@@ -24,6 +24,17 @@ repositories:
   notes: 'The sentinel watches itself. That is a partial mitigation, not a solution: a sentinel
     that has stopped running cannot report its own silence. It does catch the case where it
     still runs and its own checks fail. Nothing outside this repository observes it.'
+- repository: Jin-Aladdin/aladdin-kb-weather
+  role: knowledge-pack
+  thresholds:
+    commit_max_age_days: 180
+    validation_max_age_days: 45
+    update_max_age_days: 90
+    release_max_age_days: null
+  recovery:
+    enabled: false
+  notes: Added automatically by sentinel discovery. Thresholds are the conservative defaults
+    for a pack whose rhythm is not yet known; tighten them once it has one.
 reporting:
   open_issues: true
   issue_label: sentinel
