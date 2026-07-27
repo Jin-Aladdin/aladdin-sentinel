@@ -30,7 +30,7 @@ repositories:
       (ADR-0005), so no update threshold applies. Ownership is moving to
       Aladdin-Knowledge; update this entry when the transfer happens.
 
-  - repository: Aladdin-Knowledge/aladdin-sentinel
+  - repository: Jin-Aladdin/aladdin-sentinel
     role: sentinel
     thresholds:
       commit_max_age_days: 200
@@ -46,6 +46,23 @@ repositories:
       solution: a sentinel that has stopped running cannot report its own
       silence. It does catch the case where it still runs and its own checks
       fail. Nothing outside this repository observes it.
+
+  - repository: Jin-Aladdin/aladdin-kb-weather
+    role: knowledge-pack
+    thresholds:
+      commit_max_age_days: 180
+      validation_max_age_days: 45
+      # The declared source is the NWS alert type list, which changes rarely.
+      # Sixty days of silence from it is normal; ninety is worth a look.
+      update_max_age_days: 90
+      # No release threshold: the pack has not published a version yet, and
+      # reporting the absence of something that never happened is noise.
+      release_max_age_days: null
+    recovery:
+      enabled: false
+    notes: >-
+      2730 definitions imported once from the NWS glossary, plus curated scale
+      and institution knowledge, plus one live source tracked at propose level.
 
 reporting:
   open_issues: true
