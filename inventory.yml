@@ -1,72 +1,30 @@
-inventory_version: "0.1.0"
-
-# Repositories this sentinel watches.
-# Validates against schemas/sentinel-inventory.schema.json in aladdin-spec.
-#
-# A threshold that is not declared is not checked. That is deliberate: a
-# repository opts out of a check by leaving it unset, rather than the sentinel
-# inventing a default and reporting noise nobody reads.
-
+inventory_version: 0.1.0
 defaults:
   commit_max_age_days: 120
   validation_max_age_days: 45
   require_enabled_workflows: true
-
 repositories:
-  - repository: Jin-Aladdin/aladdin-spec
-    role: specification
-    thresholds:
-      # A specification repository is not expected to publish often, so no
-      # release threshold is set. It is expected to keep validating.
-      validation_max_age_days: 45
-      commit_max_age_days: 180
-    recovery:
-      # Dispatching into another repository needs a credential that reaches it,
-      # which means an organization-owned GitHub App. Until one exists, the
-      # report is the output.
-      enabled: false
-    notes: >-
-      The specification repository. It runs no knowledge updates by design
-      (ADR-0005), so no update threshold applies. Ownership is moving to
-      Aladdin-Knowledge; update this entry when the transfer happens.
-
-  - repository: Jin-Aladdin/aladdin-sentinel
-    role: sentinel
-    thresholds:
-      commit_max_age_days: 200
-      # Explicit null, not omission: the inventory default declares a
-      # validation threshold, and omitting it here would inherit that default.
-      # This repository runs no validation workflow, so the check does not
-      # apply to it.
-      validation_max_age_days: null
-    recovery:
-      enabled: false
-    notes: >-
-      The sentinel watches itself. That is a partial mitigation, not a
-      solution: a sentinel that has stopped running cannot report its own
-      silence. It does catch the case where it still runs and its own checks
-      fail. Nothing outside this repository observes it.
-
-  - repository: Jin-Aladdin/aladdin-kb-weather
-    role: knowledge-pack
-    thresholds:
-      commit_max_age_days: 180
-      validation_max_age_days: 45
-      # The declared source is the NWS alert type list, which changes rarely.
-      # Sixty days of silence from it is normal; ninety is worth a look.
-      update_max_age_days: 90
-      # No release threshold: the pack has not published a version yet, and
-      # reporting the absence of something that never happened is noise.
-      release_max_age_days: null
-    recovery:
-      enabled: false
-    notes: >-
-      2730 definitions imported once from the NWS glossary, plus curated scale
-      and institution knowledge, plus one live source tracked at propose level.
-
+- repository: Jin-Aladdin/aladdin-spec
+  role: specification
+  thresholds:
+    validation_max_age_days: 45
+    commit_max_age_days: 180
+  recovery:
+    enabled: false
+  notes: The specification repository. It runs no knowledge updates by design (ADR-0005),
+    so no update threshold applies. Ownership is moving to Aladdin-Knowledge; update this
+    entry when the transfer happens.
+- repository: Jin-Aladdin/aladdin-sentinel
+  role: sentinel
+  thresholds:
+    commit_max_age_days: 200
+    validation_max_age_days: null
+  recovery:
+    enabled: false
+  notes: 'The sentinel watches itself. That is a partial mitigation, not a solution: a sentinel
+    that has stopped running cannot report its own silence. It does catch the case where it
+    still runs and its own checks fail. Nothing outside this repository observes it.'
 reporting:
   open_issues: true
   issue_label: sentinel
-  # Failing the run makes the signal loud. Leaving it false keeps the run
-  # history readable while the inventory is small and partly dormant.
   fail_workflow_on_unhealthy: false
