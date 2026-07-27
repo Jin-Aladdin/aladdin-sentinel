@@ -33,10 +33,12 @@ repositories:
   - repository: Aladdin-Knowledge/aladdin-sentinel
     role: sentinel
     thresholds:
-      # No validation threshold: this repository runs no validation workflow,
-      # so judging the age of one would report a check that does not exist.
-      # Leaving a threshold unset is the documented way to opt out.
       commit_max_age_days: 200
+      # Explicit null, not omission: the inventory default declares a
+      # validation threshold, and omitting it here would inherit that default.
+      # This repository runs no validation workflow, so the check does not
+      # apply to it.
+      validation_max_age_days: null
     recovery:
       enabled: false
     notes: >-

@@ -50,7 +50,7 @@ jobs:
           # Pinned to a commit rather than a tag: a commit cannot be moved,
           # and the inventory schema this workflow needs was added after
           # v0.1.0 was tagged. Move to a tag once one contains it.
-          ref: fcc465b90ab1e32d6bca576db9ac24000b911ffb
+          ref: 97720fc7539c7e382f97ee9f590649e656d36d05
           path: .aladdin-spec
 
       - name: Set up Python
