@@ -116,6 +116,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # A fresh repository has no labels, and a missing label must not
+          # discard a report that was already produced.
+          gh label create sentinel             --description "Raised by the sentinel"             --color B60205             --force >/dev/null 2>&1 || true
           existing=$(gh issue list --state open --label sentinel --json number --jq '.[0].number')
           if [ -n "${existing}" ]; then
             gh issue comment "${existing}" --body-file sentinel-report.md
